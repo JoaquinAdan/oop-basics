@@ -24,9 +24,11 @@ export class PlatziClass {
 
 class Course {
   #name
-  constructor({ name, classes = [] }) {
+  constructor({ name, classes = [], isFree = false, lang = 'spanish' }) {
     this.#name = name
     this.classes = classes
+    this.isFree = isFree
+    this.lang = lang
   }
   get name() {
     return this.#name
@@ -42,6 +44,8 @@ class Course {
 
 const cursoProgBasica = new Course({
   name: 'Curso Gratis de Programación Básica',
+  isFree: true,
+  lang: 'english',
 })
 
 // console.log(cursoProgBasica.name)
@@ -51,6 +55,7 @@ const cursoProgBasica = new Course({
 
 const cursoDefinitivoHTML = new Course({
   name: 'Curso Definitivo de HTML y CSS',
+  lang: 'english',
 })
 
 const cursoPracticoHTML = new Course({
@@ -113,7 +118,34 @@ class Student {
   }
 }
 
-const juan2 = new Student({
+class FreeStudent extends Student {
+  constructor(props) {
+    super(props)
+  }
+  approvedCourse(newCourse) {
+    if (newCourse.isFree && newCourse.lang !== 'english') {
+      this.approvedCourses.push(newCourse.name)
+    } else {
+      console.warn('Lo siento, ' + this.name + ', solo puedes tomar cursos abiertos o que no sean en ingles')
+    }
+  }
+}
+class BasicStudent extends Student {
+  constructor(props) {
+    super(props)
+  }
+}
+
+class ExpertStudent extends Student {
+  constructor(props) {
+    super(props)
+  }
+  approvedCourse(newCourse) {
+    this.approvedCourses.push(newCourse.name)
+  }
+}
+
+const juan = new FreeStudent({
   name: 'JuanDC',
   username: 'juandc',
   email: 'juanito@juanito.com',
@@ -121,7 +153,10 @@ const juan2 = new Student({
   learningPaths: [escuelaWeb, escuelaVgs],
 })
 
-const miguelito2 = new Student({
+juan.approvedCourse(cursoProgBasica)
+console.log(juan)
+
+const miguelito2 = new BasicStudent({
   name: 'Miguelito',
   username: 'migelitofeliz',
   email: 'miguelito@juanito.com',

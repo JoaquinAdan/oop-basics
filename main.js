@@ -1,3 +1,17 @@
+class Comment {
+  constructor({ content, studentName, studentRole = 'estudiante' }) {
+    this.content = content
+    this.studentName = studentName
+    this.studentRole = studentRole
+    this.likes = 0
+  }
+  publicar() {
+    console.log(this.studentName + ' (' + this.studentRole + ')')
+    console.log(this.likes + ' likes')
+    console.log(this.content)
+  }
+}
+
 function videoPlay(id) {
   const urlSecreta = `https://platziultrasecreto.com/${id}`
   console.log('Se está reproduciendo desde la url ' + urlSecreta)
@@ -116,6 +130,13 @@ class Student {
     this.approvedCourses = approvedCourses
     this.learningPaths = learningPaths
   }
+  publicarComentario(commentContent) {
+    const comment = new Comment({
+      content: commentContent,
+      studentName: this.name,
+    })
+    comment.publicar()
+  }
 }
 
 class FreeStudent extends Student {
@@ -145,6 +166,23 @@ class ExpertStudent extends Student {
   }
 }
 
+class TeacherStudent extends Student {
+  constructor(props) {
+    super(props)
+  }
+  approvedCourse(newCourse) {
+    this.approvedCourses.push(newCourse.name)
+  }
+  publicarComentario(commentContent) {
+    const comment = new Comment({
+      content: commentContent,
+      studentName: this.name,
+      studentRole: 'profesor',
+    })
+    comment.publicar()
+  }
+}
+
 const juan = new FreeStudent({
   name: 'JuanDC',
   username: 'juandc',
@@ -153,8 +191,18 @@ const juan = new FreeStudent({
   learningPaths: [escuelaWeb, escuelaVgs],
 })
 
-juan.approvedCourse(cursoProgBasica)
-console.log(juan)
+const freddy = new TeacherStudent({
+  name: 'Freddy Vega',
+  username: 'freddier',
+  email: 'f@gep.com',
+  instagram: 'freddiervega',
+})
+
+// juan.approvedCourse(cursoProgBasica)
+// console.log(juan)
+
+juan.publicarComentario('Este curso me encanta mucho')
+freddy.publicarComentario('Este curso me encanta')
 
 const miguelito2 = new BasicStudent({
   name: 'Miguelito',
